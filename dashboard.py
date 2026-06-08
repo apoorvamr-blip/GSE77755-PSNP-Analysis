@@ -103,23 +103,7 @@ with tab1:
 
     st.subheader("Log2 Fold Change of Significant Differentially Expressed Genes")
 
-    fig = px.bar(
-        all_degs,
-        x="Gene",
-        y="log2FC",
-        color="Timepoint",
-        facet_col="Timepoint",
-        text="log2FC",
-        title="Differentially Expressed Genes Across Timepoints",
-        height=500
-    )
-
-    fig.update_traces(
-        texttemplate="%{text:.2f}",
-        textposition="outside"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
+    st.dataframe(all_degs)
 
     st.info(
         "The transcriptomic response was limited at 1 dpi but shifted toward complement-associated immune activation by 3 dpi, particularly through c3a.3 and cfb."
