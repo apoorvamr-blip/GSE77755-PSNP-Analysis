@@ -124,7 +124,7 @@ st.write(all_degs.columns.tolist())
 
 st.write("Preview:")
 st.dataframe(all_degs.head())
-    fig=px.bar(
+    fig = px.bar(
         all_degs,
         x="Gene",
         y="log2FC",
