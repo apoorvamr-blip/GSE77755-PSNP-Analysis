@@ -30,40 +30,22 @@ st.markdown("**Dataset:** GSE77755 | **Organism:** *Danio rerio* | **Analysis:**
 st.markdown("---")
 
 # ── DATA ──
-# DEGs 1dpi
 deg1 = pd.read_csv("data/DEG_1dpi.csv")
-
-# DEGs 3dpi
 deg3 = pd.read_csv("data/DEG_3dpi.csv")
 
-deg1 = deg1.rename(columns={
-    "X": "Gene",
-    "log2FoldChange": "log2FC"
-})
+deg1 = deg1.rename(columns={"X": "Gene", "log2FoldChange": "log2FC"})
+deg3 = deg3.rename(columns={"X": "Gene", "log2FoldChange": "log2FC"})
 
-deg3 = deg3.rename(columns={
-    "X": "Gene",
-    "log2FoldChange": "log2FC"
-})
-
-# Add timepoint labels
 deg1["Timepoint"] = "1 dpi"
 deg3["Timepoint"] = "3 dpi"
 
 gene_map = pd.read_csv("data/Final_Immune_Gene_Table.csv")
+symbol_dict = dict(zip(gene_map["SYMBOL"], gene_map["GENENAME"]))
 
-symbol_dict = dict(
-    zip(
-        gene_map["SYMBOL"],
-        gene_map["GENENAME"]
-    )
-)
+immune_top20 = pd.read_csv("data/Immune_Genes_GSE77755.csv")
 
-immune_top20 = pd.read_csv(
-    "data/Immune_Genes_GSE77755.csv"
-)
-# Combined DEG table
 all_degs = pd.concat([deg1, deg3], ignore_index=True)
+
 # ── TABS ──
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Overview",
@@ -75,11 +57,13 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Figures"
 ])
 
+# ──────────────────────────────────────────
+# TAB 1: Overview
+# ──────────────────────────────────────────
 with tab1:
     st.header("Study Overview")
 
     c1, c2, c3, c4 = st.columns(4)
-
     c1.metric("Total Genes Tested", "~31,000")
     c2.metric("DEGs at 1 dpi", "4")
     c3.metric("DEGs at 3 dpi", "4")
@@ -117,13 +101,8 @@ with tab1:
 
     st.markdown("---")
 
-st.subheader("Log2 Fold Change of Significant Differentially Expressed Genes")
-st.write("Columns in all_degs:")
-st.write(all_degs.columns.tolist())
-st.write(all_degs.columns.tolist())
+    st.subheader("Log2 Fold Change of Significant Differentially Expressed Genes")
 
-st.write("Preview:")
-st.dataframe(all_degs.head())
     fig = px.bar(
         all_degs,
         x="Gene",
@@ -145,7 +124,7 @@ st.dataframe(all_degs.head())
     st.info(
         "The transcriptomic response was limited at 1 dpi but shifted toward complement-associated immune activation by 3 dpi, particularly through c3a.3 and cfb."
     )
-    
+
 # ──────────────────────────────────────────
 # TAB 2: DEGs
 # ──────────────────────────────────────────
@@ -156,12 +135,10 @@ with tab2:
     col1, col2 = st.columns(2)
 
     with col1:
-
         st.subheader("1 dpi Significant Genes")
 
         st.dataframe(
-            deg1[["Gene","log2FC","padj"]]
-            .sort_values("padj"),
+            deg1[["Gene", "log2FC", "padj"]].sort_values("padj"),
             use_container_width=True
         )
 
@@ -181,12 +158,10 @@ with tab2:
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
-
         st.subheader("3 dpi Significant Genes")
 
         st.dataframe(
-            deg3[["Gene","log2FC","padj"]]
-            .sort_values("padj"),
+            deg3[["Gene", "log2FC", "padj"]].sort_values("padj"),
             use_container_width=True
         )
 
@@ -210,12 +185,9 @@ with tab2:
     st.subheader("Combined DEG Table")
 
     st.dataframe(
-        all_degs[
-            ["Gene","Timepoint","log2FC","padj"]
-        ].sort_values("padj"),
+        all_degs[["Gene", "Timepoint", "log2FC", "padj"]].sort_values("padj"),
         use_container_width=True
     )
-
 
 # ──────────────────────────────────────────
 # TAB 3: Immune Genes
@@ -224,10 +196,7 @@ with tab3:
 
     st.header("Immune-Related Differentially Expressed Genes")
 
-    st.dataframe(
-        immune_top20,
-        use_container_width=True
-    )
+    st.dataframe(immune_top20, use_container_width=True)
 
     fig = px.bar(
         immune_top20,
@@ -258,41 +227,38 @@ with tab4:
 
     interpretation = pd.DataFrame([
         {
-            "Gene":"npas4a",
-            "Timepoint":"1 dpi",
-            "Function":"Neuronal stress response and transcriptional regulation",
-            "Biological Significance":"Early cellular stress response following PSNP exposure"
+            "Gene": "npas4a",
+            "Timepoint": "1 dpi",
+            "Function": "Neuronal stress response and transcriptional regulation",
+            "Biological Significance": "Early cellular stress response following PSNP exposure"
         },
         {
-            "Gene":"cetp",
-            "Timepoint":"3 dpi",
-            "Function":"Cholesterol and lipid transport",
-            "Biological Significance":"Suggests metabolic disruption following exposure"
+            "Gene": "cetp",
+            "Timepoint": "3 dpi",
+            "Function": "Cholesterol and lipid transport",
+            "Biological Significance": "Suggests metabolic disruption following exposure"
         },
         {
-            "Gene":"c3a.3",
-            "Timepoint":"3 dpi",
-            "Function":"Complement component C3a",
-            "Biological Significance":"Activation of innate immune signaling"
+            "Gene": "c3a.3",
+            "Timepoint": "3 dpi",
+            "Function": "Complement component C3a",
+            "Biological Significance": "Activation of innate immune signaling"
         },
         {
-            "Gene":"cfb",
-            "Timepoint":"3 dpi",
-            "Function":"Complement factor B",
-            "Biological Significance":"Activation of alternative complement pathway"
+            "Gene": "cfb",
+            "Timepoint": "3 dpi",
+            "Function": "Complement factor B",
+            "Biological Significance": "Activation of alternative complement pathway"
         },
         {
-            "Gene":"igfbp1a",
-            "Timepoint":"3 dpi",
-            "Function":"Growth and stress regulation",
-            "Biological Significance":"Adaptive response to environmental stress"
+            "Gene": "igfbp1a",
+            "Timepoint": "3 dpi",
+            "Function": "Growth and stress regulation",
+            "Biological Significance": "Adaptive response to environmental stress"
         }
     ])
 
-    st.dataframe(
-        interpretation,
-        use_container_width=True
-    )
+    st.dataframe(interpretation, use_container_width=True)
 
     st.markdown("---")
 
@@ -358,37 +324,14 @@ with tab5:
     st.subheader("Mechanistic Interpretation")
 
     mechanism_df = pd.DataFrame([
-        {
-            "Stage":"Early Response",
-            "Gene":"npas4a",
-            "Role":"Stress-responsive transcription factor"
-        },
-        {
-            "Stage":"Immune Activation",
-            "Gene":"c3a.3",
-            "Role":"Complement-mediated immune signaling"
-        },
-        {
-            "Stage":"Complement Amplification",
-            "Gene":"cfb",
-            "Role":"Alternative complement pathway activation"
-        },
-        {
-            "Stage":"Metabolic Response",
-            "Gene":"cetp",
-            "Role":"Lipid metabolism and transport"
-        },
-        {
-            "Stage":"Adaptive Response",
-            "Gene":"igfbp1a",
-            "Role":"Stress and growth regulation"
-        }
+        {"Stage": "Early Response",           "Gene": "npas4a",   "Role": "Stress-responsive transcription factor"},
+        {"Stage": "Immune Activation",         "Gene": "c3a.3",    "Role": "Complement-mediated immune signaling"},
+        {"Stage": "Complement Amplification",  "Gene": "cfb",      "Role": "Alternative complement pathway activation"},
+        {"Stage": "Metabolic Response",        "Gene": "cetp",     "Role": "Lipid metabolism and transport"},
+        {"Stage": "Adaptive Response",         "Gene": "igfbp1a",  "Role": "Stress and growth regulation"}
     ])
 
-    st.dataframe(
-        mechanism_df,
-        use_container_width=True
-    )
+    st.dataframe(mechanism_df, use_container_width=True)
 
     st.markdown("---")
 
@@ -538,3 +481,4 @@ with tab7:
 
     st.subheader("Heatmap")
     st.image("figures/Heatmap_DEGs.png")
+
