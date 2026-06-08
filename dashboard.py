@@ -118,7 +118,11 @@ with tab1:
     st.markdown("---")
 
     st.subheader("Log2 Fold Change of Significant Differentially Expressed Genes")
+st.write("Columns in all_degs:")
+st.write(all_degs.columns.tolist())
 
+st.write("Preview:")
+st.dataframe(all_degs.head())
     fig = px.bar(
         all_degs,
         x="Gene",
