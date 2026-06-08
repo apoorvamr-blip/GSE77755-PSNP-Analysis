@@ -33,8 +33,8 @@ st.markdown("---")
 deg1 = pd.read_csv("data/DEG_1dpi.csv")
 deg3 = pd.read_csv("data/DEG_3dpi.csv")
 
-deg1 = deg1.rename(columns={"X": "Gene", "log2FoldChange": "log2FC"})
-deg3 = deg3.rename(columns={"X": "Gene", "log2FoldChange": "log2FC"})
+deg1 = deg1.rename(columns={"Unnamed: 0": "Gene", "log2FoldChange": "log2FC"})
+deg3 = deg3.rename(columns={"Unnamed: 0": "Gene", "log2FoldChange": "log2FC"})
 
 deg1["Timepoint"] = "1 dpi"
 deg3["Timepoint"] = "3 dpi"
